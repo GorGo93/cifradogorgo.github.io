@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Tarjeta Animada para el Día de la Madre</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+<style>
+    body, html {
+        height: 100%;
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #f4f4f9;
+        font-family: Arial, sans-serif;
+    }
+
+    .card {
+        width: 300px;
+        height: 400px;
+        position: relative;
+        perspective: 1000px;
+        cursor: pointer;
+    }
+
+    .card-inner {
+        width: 100%;
+        height: 100%;
+        transition: transform 1s;
+        transform-style: preserve-3d;
+        position: absolute;
+    }
+
+    .card-front, .card-back {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        backface-visibility: hidden;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        border-radius: 10px;
+        color: #fff;
+        overflow: hidden;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    .card-front {
+        background-color: #ffb6c1;
+    }
+
+    .card-back {
+        background-color: #ff69b4;
+        transform: rotateX(180deg);
+    }
+
+    .card.is-flipped .card-inner {
+        transform: rotateX(-180deg);
+    }
+
+    .stars {
+        position: absolute;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: visible;
+        display: none;
+        pointer-events: none;
+        background: transparent;
+    }
+
+    .star {
+        position: absolute;
+        background-color: yellow;
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        animation: fall 2s linear forwards;
+    }
+
+    @keyframes fall {
+        to {
+            transform: translate(0, 100vh);
+        }
+    }
+
+    .hearts {
+        position: absolute;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: visible;
+        display: none;
+        pointer-events: none;
+        background: transparent;
+    }
+
+    .heart {
+        position: absolute;
+        background-color: pink;
+        width: 10px;
+        height: 10px;
+        transform: rotate(-45deg);
+        animation: fall 2s linear forwards;
+    }
+
+    .heart:before, .heart:after {
+        content: '';
+        position: absolute;
+        background-color: pink;
+        border-radius: 50%;
+        width: 10px;
+        height: 10px;
+        top: -5px;
+    }
+
+    .heart:after {
+        left: 5px;
+    }
+</style>
+</head>
+<body>
+<div class="card" onclick="toggleCard()">
+    <div class="card-inner">
+        <div class="card-front">
+            Presiona aquí
+        </div>
+        <div class="card-back">
+            <div>¡Feliz Día de la Madre a la mejor madre!</div>
+            <div class="hearts"></div>
+            <div class="stars"></div>
+        </div>
+    </div>
+</div>
+<audio id="fireworksSound" src="path_to_your_fireworks_sound.mp3"></audio>
+
+<script>
+    function toggleCard() {
+        var card = document.querySelector('.card');
+        var heartsContainer = document.querySelector('.hearts');
+        var starsContainer = document.querySelector('.stars');
+        var audio = document.getElementById('fireworksSound');
+        card.classList.toggle('is-flipped');
+        
+        // Clear existing hearts and stars
+        heartsContainer.innerHTML = '';
+        starsContainer.innerHTML = '';
+        
+        if (card.classList.contains('is-flipped')) {
+            audio.play();
+            // Create hearts
+            for (let i = 0; i < 50; i++) {
+                let heart = document.createElement('div');
+                heart.className = 'heart';
+                heart.style.left = Math.random() * 300 + 'px';
+                heart.style.animationDelay = Math.random() * 2 + 's';
+                heartsContainer.appendChild(heart);
+            }
+            heartsContainer.style.display = 'block';
+            // Create stars
+            for (let i = 0; i < 100; i++) {
+                let star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = Math.random() * 300 + 'px';
+                star.style.top = Math.random() * 400 + 'px';
+                star.style.animationDelay = Math.random() * 2 + 's';
+                starsContainer.appendChild(star);
+            }
+            starsContainer.style.display = 'block';
+        } else {
+            heartsContainer.style.display = 'none';
+            starsContainer.style.display = 'none';
+            audio.pause();
+            audio.currentTime = 0;
+        }
+    }
+</script>
+</body>
+</html>
